@@ -11,7 +11,7 @@
 车机 Termux 直接执行:
 
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/xch1986/diplus-opt/main/install.sh)
+bash <(curl -sSL https://github.com/xch1986/diplus-opt/releases/download/v1.0-opt/install.sh)
 ```
 
 脚本自动完成:
