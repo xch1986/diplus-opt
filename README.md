@@ -42,15 +42,18 @@ bash install-self.sh
 ```
 (脚本内已包含全部优化文件, 无需联网下载)
 
-## 安装方式二: 在线一键 (适用 GitHub/Gitee/静态服务器)
+## 安装方式二: 在线一键 (GitHub)
 
-1. 把 `install.sh` 和 `diplus-opt.tar.gz` 上传到同一目录
-2. 编辑 install.sh 把 `BASE_URL` 改成你的下载地址
-3. 别人在车机 Termux 执行:
+别人车机 Termux 直接执行(已配置好 GitHub raw 直链):
+
 ```bash
-bash <(curl -sSL https://你的域名/install.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/xch1986/diplus-opt/main/install.sh)
 ```
-注意: 飞牛网盘分享链接带签名校验, 不支持 curl 直接下载, 请用方式一。
+
+脚本会自动: 下载 `diplus-opt.tar.gz` → 解压 → 覆盖 www 文件(含 api/alarm.php) → 重启 nginx。
+
+> 注意: 国内网络访问 GitHub raw 可能不稳定, 如果下载失败请改用方式一(install-self.sh)。
+> 飞牛网盘分享链接带签名校验, 不支持 curl 直接下载。
 
 ## 文件结构
 ```
