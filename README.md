@@ -1,11 +1,37 @@
-# 迪加 (diplus-www) 优化覆盖包
+# 迪加 (diplus-www) 优化完整扩展包
 
-针对 BYD 宋PLUS DM-i 车机 Termux 部署的 diplus-www (迪加 web) 深度优化版。
+基于 diplus-www (作者 @甲壳虫) 的深度优化版, **车机 Termux 一键完整安装, 无需先装原版**。
+
+**出处**: 原项目 https://github.com/cnjackchen/diplus-www
+
+---
+
+## 🚀 一键安装
+
+车机 Termux 直接执行:
+
+```bash
+bash <(curl -sSL https://raw.githubusercontent.com/xch1986/diplus-opt/main/install.sh)
+```
+
+脚本自动完成:
+1. 下载完整扩展包 (home.tar, Release v1.0-opt)
+2. 部署到 ~/
+3. 自动安装依赖 (nginx / php / php-fpm / ffmpeg / sqlite / frp 等)
+4. 启动车机 web 服务
+
+完成后访问: **http://车机IP:8018** (默认账号 admin / 123456)
+
+> ⚠ GitHub 访问慢/失败时, 用浏览器打开
+> https://github.com/xch1986/diplus-opt/releases/download/v1.0-opt/home.tar
+> 手动下载 home.tar 放到 ~/ 后重跑 install.sh 即可。
+
+---
 
 ## 包含的优化
 
 ### 界面
-- 顶部/左侧统一 10 项菜单: 首页|哨兵|行驶数据|file browser|openlist|frp|lucky|推送设置|首页参数|通用设置
+- 统一 10 项菜单: 首页|哨兵|行驶数据|file browser|openlist|frp|lucky|推送设置|首页参数|通用设置
 - 手机端左侧竖排菜单(68px 紧凑), 电脑端横向菜单(18px 字号)
 - openlist / lucky / 哨兵 / 行驶数据 / file browser 全部 iframe 选项卡嵌套
 - lucky 中文界面
@@ -14,60 +40,29 @@
 
 ### 功能
 - 哨兵视频筛选: 有人/有车/晃动/振动, 阈值与车机 config_M.dat 同步
-- 微信/钉钉推送: "有人(有车) 且(晃动或振动)" 逻辑
+- 微信/钉钉推送: "有人(有车) 且(晃动或振动)" 逻辑, 推送完整显示晃动/振动数值
 - 推送页晃动/振动阈值保存后同步到哨兵筛选(config_M.dat)
 - 视频进度条事件标记: 蓝色进度>红色有人>黄色有车, 点击图标跳转事件
 - 通用设置: USB常通电开关/视频缩略图/移动视频/自动清理/亮度
 - nginx 反代 openlist(同源) + 静态资源加速
 
 ## 文件说明
-- `install-self.sh`   自包含安装脚本(内嵌全部优化文件, 一个文件搞定, 推荐!)
-- `install.sh`        在线安装脚本(需配 BASE_URL 指向你的 tar.gz)
-- `diplus-opt.tar.gz` 优化文件压缩包(install.sh 的下载源)
-- `README.md`         本说明
+- `install.sh`        一键安装脚本 (下载 release home.tar, 完整安装)
+- `home.tar`          完整扩展包 (Release v1.0-opt 资产)
+- `install-self.sh`   自包含安装脚本 (内嵌全部优化文件, 适用于飞牛等网盘分享)
+- `diplus-opt.tar.gz` 增量覆盖包 (适用于已装原版, 仅覆盖优化文件)
 
 ## 安装前提
-车机已用官方脚本安装 diplus 基础版:
-```bash
-bash <(curl -sSL http://lanye.pw/diplus)
-```
+车机已安装 Termux 且开启 ADB 无线调试 (DiLink 车机)。
 
-## 安装方式一: 自包含脚本 (推荐, 适用飞牛等网盘分享)
+## 默认账号
+- Web / Lucky / FileBrowser: **admin / 123456** (首次登录后请修改)
+- SSH: 用户名 `$(whoami)`, 密码 `123456`
 
-1. 浏览器打开分享链接, 下载 `install-self.sh`
-2. 把 install-self.sh 传到车机 Termux (可用 adb push / U盘 / 微信传文件)
-3. 在车机 Termux 执行:
-```bash
-bash install-self.sh
-```
-(脚本内已包含全部优化文件, 无需联网下载)
+## 远程访问
+编辑 `~/frp/frpc.toml` 填入你的 frp 服务器地址和 token, 然后在 web 管理页启用 frp。
 
-## 安装方式二: 在线一键 (GitHub)
-
-别人车机 Termux 直接执行(已配置好 GitHub raw 直链):
-
-```bash
-bash <(curl -sSL https://raw.githubusercontent.com/xch1986/diplus-opt/main/install.sh)
-```
-
-脚本会自动: 下载 `diplus-opt.tar.gz` → 解压 → 覆盖 www 文件(含 api/alarm.php) → 重启 nginx。
-
-> 注意: 国内网络访问 GitHub raw 可能不稳定, 如果下载失败请改用方式一(install-self.sh)。
-> 飞牛网盘分享链接带签名校验, 不支持 curl 直接下载。
-
-## 文件结构
-```
-diplus-opt/
-├── www/
-│   ├── settings.html  index.html  video_list.html  alarm.php
-│   ├── alarm_details.html  alarm_details_car.html  sum.html  sv_video3.html
-│   ├── api/   (settings_msg.php  settings_general.php  openlist.php ...)
-│   ├── view/  (settings_msg.vue  settings_general.vue  ...)
-│   └── includes/share.php
-└── nginx/nginx.conf
-```
-
-## 备注
-- 覆盖包为增量版, 需先装官方基础版
-- 配置文件路径均为 Termux 默认 (home/www, home/nginx)
-- 车机 IP 通过无线 adb 部署 (UFI root 中转)
+## 常见问题
+- GitHub 下载慢: 使用代理镜像, 或手动下载 home.tar
+- 安装后 web 打不开: 确认 nginx/php-fpm 已启动 (`pgrep -f nginx`)
+- 推送不触发: 检查微信推送 webhook 配置和"有人/有车"开关
