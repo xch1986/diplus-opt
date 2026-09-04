@@ -12,7 +12,7 @@
 # ==========================================================
 home="/data/data/com.termux/files/home"
 version="2.8.1-opt"
-hometar_url="https://raw.githubusercontent.com/xch1986/diplus-opt/main/home.tar"
+hometar_url="https://github.com/xch1986/diplus-opt/releases/download/v1.0-opt/home.tar"
 
 echo ""
 echo "=============================================="
